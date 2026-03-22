@@ -13,36 +13,22 @@ public class p1_concurrent_1 {
         new Thread(()->{printNum();},"thread2").start();
     }
 
-    // public static void printNum(){
-    //     while(true){
-    //         synchronized(lock){
-    //             // 1、打印
-    //             if(num>100) break;
-    //             System.out.print(num);
-    //             // System.out.print(Thread.currentThread().getName());
-    //             num++;
-
-    //             // 2、唤醒其他线程
-    //             lock.notifyAll();
-    //             // 3、自己挂起、让出cpu
-    //             try{
-    //                 if(num<=100) lock.wait();
-    //             }catch(Exception e){}
-                
-    //         }
-    //     }
-    // }
-
     public static void printNum(){
-        for(int i=0; i<=num; i++){
+        while(true){
             synchronized(lock){
-                System.out.print(i);
+                // 1、打印
+                if(num>100) break;
+                System.out.print(num);
+                // System.out.print(Thread.currentThread().getName());
+                num++;
 
+                // 2、唤醒其他线程
                 lock.notifyAll();
+                // 3、自己挂起、让出cpu
+                try{
+                    if(num<=100) lock.wait();
+                }catch(Exception e){}
                 
-                try {
-                    lock.wait();
-                } catch (Exception e) {}
             }
         }
     }
